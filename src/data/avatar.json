@@ -1,0 +1,22 @@
+{
+  "name": "Josué",
+  "roles": [
+    "IT Support Technician",
+    "Systems Engineering Student",
+    "Hybrid Athlete"
+  ],
+  "projects": ["AIwake", "AIflow", "byjosue.com"],
+  "coreValues": [
+    "Consciousness expansion",
+    "Applied philosophy",
+    "Technical excellence"
+  ],
+  "currentChallenges": [
+    "Financial independence 2026",
+    "Managing work-study-running balance"
+  ],
+  "baseline": {
+    "typicalStressors": ["Sense of stagnation", "Mental noise from technology"],
+    "recoveryTools": ["Running", "Nature walks", "Sky watching"]
+  }
+}

@@ -1,17 +1,40 @@
-import { analyzeThought } from './services/brain.js';
+import { loadJSON } from './utils/fileHandler.js';
+import { analyzeMoment } from './services/brain.js';
 
-console.log('--- AIwake System Initialized ---');
+// 1. Creamos la Memoria de Sesión (Un simple Array vacío)
+// Usamos 'let' porque la lista irá creciendo
+let sessionHistory = [];
 
-// Simulamos una entrada del usuario
-const userPrompt =
-  'Me siento muy estresado y tengo que hacer muchas cosas hoy.';
+const run = async () => {
+  const avatar = await loadJSON('./src/data/avatar.json');
+  if (!avatar) return;
 
-console.log(`Usuario dice: "${userPrompt}"`);
+  console.log(`--- AIwake Sesión para ${avatar.name} ---`);
 
-// El Cerebro procesa
-const result = analyzeThought(userPrompt);
+  // 2. Simulamos una interacción (Input del usuario)
+  const currentInput = {
+    content: 'Tendo miedo de no poder con tanto trabajo y responsabilidades.',
+    metadata: {
+      energyLevel: 4,
+      density: 8, // Alta carga mental
+      timestamp: new Date().toISOString(),
+    },
+  };
 
-// El sistema responde
-console.log('--- Análisis de Conciencia ---');
-console.log(`Estado Detectado: ${result.state}`);
-console.log(`Sugerencia: ${result.suggestion}`);
+  // 3. Procesamos el momento enviando TAMBIÉN el avatar
+  const reflection = analyzeMoment(currentInput, avatar);
+
+  // 4. GUARDAR EN MEMORIA: El método .push() añade el objeto al final de la lista
+  sessionHistory.push({
+    input: currentInput,
+    output: reflection,
+  });
+
+  // Mostramos el resultado
+  console.log(`> Espejo: ${reflection.stateAnalysis}`);
+  console.log(
+    `> Memoria: Tienes ${sessionHistory.length} momentos en esta sesión.`
+  );
+};
+
+run();

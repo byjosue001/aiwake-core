@@ -1,47 +1,29 @@
 /**
- * Brain Service - Versión 0.1
- * Objetivo: Clasificar la "Densidad Mental" del input del usuario.
+ * analyzeMoment - Ahora recibe el avatar para dar contexto
  */
+export const analyzeMoment = (moment, avatar) => {
+  const { content, metadata } = moment;
+  const { energyLevel, density } = metadata;
 
-const analyzeThought = (input) => {
-  // 1. Normalización: Pasamos todo a minúsculas para facilitar la búsqueda
-  const text = input.toLowerCase();
+  // 1. Lógica Personalizada usando los datos del Avatar
+  // Buscamos si el pensamiento tiene que ver con sus roles (ej. IT Support)
+  const isWorkRelated =
+    content.toLowerCase().includes('soporte') ||
+    content.toLowerCase().includes('trabajo');
 
-  // 2. Definición de Patrones (Nuestra "Base de Conocimiento" inicial)
-  const patterns = {
-    highDensity: ['estrés', 'ansiedad', 'apurado', 'tengo que', 'muchas cosas'],
-    lowDensity: ['paz', 'claridad', 'observo', 'presente', 'fluir'],
-  };
+  let reflection = '';
 
-  // 3. Lógica de Clasificación
-  // Buscamos si el texto incluye alguna palabra de nuestros patrones
-  const isHighDensity = patterns.highDensity.some((word) =>
-    text.includes(word)
-  );
-  const isLowDensity = patterns.lowDensity.some((word) => text.includes(word));
-
-  // 4. Retorno de Estado (El Espejo)
-  if (isHighDensity) {
-    return {
-      state: 'Alta Densidad',
-      suggestion:
-        'Recomendación: Pausa de 2 minutos. Respira antes de continuar.',
-    };
-  }
-
-  if (isLowDensity) {
-    return {
-      state: 'Baja Densidad (Claridad)',
-      suggestion:
-        'Estado óptimo. Momento ideal para la autoobservación profunda.',
-    };
+  if (isWorkRelated && density > 7) {
+    // Usamos datos del avatar para dar una salida con sentido
+    reflection = `Josué, recuerda que tu rol de ${avatar.roles[0]} es un medio, no tu fin. Tu valor de "${avatar.coreValues[0]}" es lo que importa aquí.`;
+  } else if (energyLevel < 3) {
+    reflection = `Nivel de energía bajo detectado. Como corredor (${avatar.roles[2]}), sabes cuándo toca recuperar. Hoy el sistema sugiere descanso.`;
+  } else {
+    reflection = 'El espejo está claro. Sigue observando.';
   }
 
   return {
-    state: 'Neutral',
-    suggestion: 'Continúa observando el flujo de tus pensamientos.',
+    stateAnalysis: reflection,
+    timestamp: new Date().toISOString(),
   };
 };
-
-// Exportamos la función para que el "Director de Orquesta" (index.js) la use
-export { analyzeThought };
