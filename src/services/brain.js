@@ -1,25 +1,19 @@
-/**
- * analyzeMoment - Ahora recibe el avatar para dar contexto
- */
+// src/services/brain.js
+
 export const analyzeMoment = (moment, avatar) => {
   const { content, metadata } = moment;
-  const { energyLevel, density } = metadata;
-
-  // 1. Lógica Personalizada usando los datos del Avatar
-  // Buscamos si el pensamiento tiene que ver con sus roles (ej. IT Support)
-  const isWorkRelated =
-    content.toLowerCase().includes('soporte') ||
-    content.toLowerCase().includes('trabajo');
+  // Añadimos 'attachmentScore' a la desestructuración
+  const { density, attachmentScore = 5 } = metadata;
 
   let reflection = '';
 
-  if (isWorkRelated && density > 7) {
-    // Usamos datos del avatar para dar una salida con sentido
-    reflection = `Josué, recuerda que tu rol de ${avatar.roles[0]} es un medio, no tu fin. Tu valor de "${avatar.coreValues[0]}" es lo que importa aquí.`;
-  } else if (energyLevel < 3) {
-    reflection = `Nivel de energía bajo detectado. Como corredor (${avatar.roles[2]}), sabes cuándo toca recuperar. Hoy el sistema sugiere descanso.`;
+  // Lógica de desidentificación
+  if (attachmentScore > 8) {
+    reflection = `Estás muy identificado con este pensamiento. Recuerda, Josué: eres quien observa, no lo observado.`;
+  } else if (content.toLowerCase().includes('soporte') && density > 7) {
+    reflection = `El rol de ${avatar.roles[0]} está pesando. Respira.`;
   } else {
-    reflection = 'El espejo está claro. Sigue observando.';
+    reflection = 'El espejo muestra claridad.';
   }
 
   return {

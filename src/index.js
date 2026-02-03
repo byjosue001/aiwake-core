@@ -17,8 +17,9 @@ const run = async () => {
     metadata: {
       energyLevel: 4,
       density: 8, // Alta carga mental
-      timestamp: new Date().toISOString(),
+      attachmentScore: 9, // Nivel de identificación con el pensamiento
     },
+    timestamp: new Date().toISOString(),
   };
 
   // 3. Procesamos el momento enviando TAMBIÉN el avatar
