@@ -13,10 +13,10 @@ const run = async () => {
 
   // 2. Simulamos una interacción (Input del usuario)
   const currentInput = {
-    content: 'Tendo miedo de no poder con tanto trabajo y responsabilidades.',
+    content: 'Tengo miedo de no poder con tanto trabajo y responsabilidades.',
     metadata: {
-      energyLevel: 4,
-      density: 8, // Alta carga mental
+      energyLevel: 3,
+      density: 3, // Alta carga mental
       attachmentScore: 9, // Nivel de identificación con el pensamiento
     },
     timestamp: new Date().toISOString(),
