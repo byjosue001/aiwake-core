@@ -6,8 +6,10 @@
 /**
  * externalAiService.js - Simulador de Red
  */
+
 export const fetchExternalReflection = async (prompt) => {
   // 1. Usamos el prompt aunque sea en un console.log para que el linter esté feliz
+  const simulateError = false;
   console.log(`[Network]: Enviando datos de longitud: ${prompt.length}`);
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
