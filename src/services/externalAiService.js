@@ -1,27 +1,31 @@
-/**
- * Simulación de un servicio de IA externo (como OpenAI o Anthropic).
- * Aquí aplicamos Asincronía pura.
- */
+import { model } from '../config/ai.js';
 
 /**
- * externalAiService.js - Simulador de Red
+ * externalAiService.js
+ * El puente real hacia la Nube de Google.
  */
-
+// ...
 export const fetchExternalReflection = async (prompt) => {
-  // 1. Usamos el prompt aunque sea en un console.log para que el linter esté feliz
-  const simulateError = false;
-  console.log(`[Network]: Enviando datos de longitud: ${prompt.length}`);
+  try {
+    // Generar contenido
+    const result = await model.generateContent(prompt);
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+    // IMPORTANTE: Aseguramos que la respuesta esté completa antes de convertirla a texto
+    const response = await result.response;
+    const text = response.text();
 
-  // --- ÁREA DE PRUEBAS DE FALLO ---
-  // Para probar la resiliencia (Safe Mode), descomenta la línea de abajo.
-  //throw new Error('API_OVERLOADED');
-  // --------------------------------
+    // Validación de seguridad: Si viene vacío, lanzamos error para que entre el Fallback Local
+    if (!text || text.length < 10) {
+      throw new Error('Respuesta de IA vacía o incompleta');
+    }
 
-  // Si el throw está comentado, este código ya es alcanzable
-  return {
-    aiResponse: '[IA]: El reflejo es nítido. Estás observando el mecanismo.',
-    status: 200,
-  };
+    return {
+      aiResponse: text,
+      status: 200,
+      usage: { tokens: response.usageMetadata?.totalTokenCount || 0 },
+    };
+  } catch (error) {
+    console.error('🔥 Error en la API de Gemini:', error.message);
+    throw error;
+  }
 };
